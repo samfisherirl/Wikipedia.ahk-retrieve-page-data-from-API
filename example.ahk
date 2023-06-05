@@ -1,10 +1,8 @@
-#Include JXON.ahk
+﻿#Include JXON.ahk
 #Include Wikipedia.ahk
-;Source github.com/samfisherirl
-
 ; set content header
-wiki := Wikipedia("python coding") ;python coding is NOT an exact match to the page title 
-page := wiki.query()
+wiki := Wikipedia() ;python coding is NOT an exact match to the page title 
+page := wiki.query("python coding")
 /*  this return value stores only the primary match. 
     up to 5 results will be returned with object.pages
     matches are based on keywords and not title 1:1

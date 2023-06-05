@@ -44,11 +44,10 @@ Class Wikipedia
     * * @method query returns first page match, stores top matches in object
     */
     __New(
-        keywords,
         headers := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
     )
     {
-        this.url := Format("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch={1}&srprop=size&srlimit=5", keywords)
+        this.url := "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch={1}&srprop=size&srlimit=5"
         this.headers := headers
         this.page_text := ""
         this.matches := Map()
@@ -67,12 +66,6 @@ Class Wikipedia
             page_extract = page_content["query"]["pages"][0]["extract"]
             */
         this.pages := []
-        try {
-            this.response := this.Get(this.url)
-        }
-        catch {
-            this.response := false
-        }
     }
     Get(url)
     {
@@ -89,14 +82,10 @@ Class Wikipedia
         }
         return this.response
     }
-    query()
+    query(keywords)
     {
-        if not (this.response) {
-            response := this.Get(this.url)
-        }
-        else {
-            response := this.response
-        }
+        this.url := Format("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch={1}&srprop=size&srlimit=5", keywords)
+        response := this.Get(this.url)
         if InStr(this.response, "query") && InStr(this.response, "search")
         {
             jdata := Jxon_Load(&response)
