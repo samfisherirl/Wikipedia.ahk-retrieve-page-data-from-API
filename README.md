@@ -12,6 +12,7 @@ This AutoHotkey library provides a convenient way to retrieve information from W
 
 ```autohotkey
 #Include JXON.ahk
+#Include Wikipedia.ahk
 ; Set content header
 wiki := Wikipedia("python coding") ; "python coding" is NOT an exact match to the page title
 page := wiki.query()
