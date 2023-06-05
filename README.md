@@ -6,7 +6,7 @@ This AutoHotkey library provides a convenient way to retrieve information from W
 
 ### Prerequisites
 
-- Include the `JXON.ahk` library in your AutoHotkey script.
+- Include the `JXON.ahk` library in your AutoHotkey script. https://github.com/TheArkive/JXON_ahk2
 
 ### Example
 
