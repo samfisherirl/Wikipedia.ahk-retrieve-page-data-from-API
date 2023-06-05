@@ -2,10 +2,6 @@
 
 This AutoHotkey library provides a convenient way to retrieve information from Wikipedia pages. It allows you to search for pages based on keywords and retrieve various details such as category, description, citations, summary, and links.
 
-## Installation
-
-To use this library, you'll need to have AutoHotkey installed. You can download and install AutoHotkey from the official website: [AutoHotkey](https://www.autohotkey.com/)
-
 ## Usage
 
 ### Prerequisites
