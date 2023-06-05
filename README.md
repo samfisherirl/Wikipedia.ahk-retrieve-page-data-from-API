@@ -1,4 +1,4 @@
-# Wikipedia.ahk - AutoHotkey Library
+# Wikipedia.ahk - AutoHotkey v2 Class Library
 
 This AutoHotkey library provides a convenient way to retrieve information from Wikipedia pages. It allows you to search for pages based on keywords and retrieve various details such as category, description, citations, summary, and links.
 
