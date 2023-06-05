@@ -1,5 +1,7 @@
-﻿#Include JXON.ahk
+#Include JXON.ahk
 #Include Wikipedia.ahk
+;Source github.com/samfisherirl
+
 ; set content header
 wiki := Wikipedia("python coding") ;python coding is NOT an exact match to the page title 
 page := wiki.query()
