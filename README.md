@@ -11,37 +11,38 @@ This AutoHotkey library provides a convenient way to retrieve information from W
 ### Example
 
 ```autohotkey
-#Include JXON.ahk
+﻿#Include JXON.ahk
 #Include Wikipedia.ahk
-; Set content header
-wiki := Wikipedia("python coding") ; "python coding" is NOT an exact match to the page title
-page := wiki.query()
+; set content header
+wiki := Wikipedia() 
+page := wiki.query("python coding") ;python coding is NOT an exact match to the page title 
+    ; this return value stores only the primary match. 
+    ; up to 5 results will be returned with object.pages
+    ; matches are based on keywords and not title 1:1
+    ;     page := {
+    ;             @Prop categories : "",
+    ;             @Prop category_list: [],
+    ;             @Prop links: "",
+    ;             @Prop text: "",
+    ;             @Prop link_list: [],
+    ;             @Prop summary: ""
+    ;             @Prop title: page_title,
+    ;             @Prop url: page_url
+    ;     }
 
-MsgBox(page.text) ; The first result's text contents
-MsgBox(page.categories) ; This is a concatenated string; change to category_list to return an array
-MsgBox(page.links) ; This is a concatenated string; change to link_list to return an array
-EnumeratePagesReturned(wiki.pages)
+MsgBox(page.text) ; the first result's text contents
+MsgBox(page.categories) ; this is a concaeted string but change to category_list and returns an array
+MsgBox(page.links) ; this is a concaeted string but change to link_list and returns an array
+enumerate_pages_returned(wiki.pages)
 
-EnumeratePagesReturned(wiki_pages) {
-    ; wiki.pages.ownprops()
+
+enumerate_pages_returned(wiki_pages){
+    ;wiki.pages.ownprops()
     for page in wiki_pages {
-        ; Examples
-        ; MsgBox(page.text)
-        ; MsgBox(page.links)
-        /*
-        page := {
-                @Prop categories : "",
-                @Prop category_list: [],
-                @Prop links: "",
-                @Prop text: "",
-                @Prop link_list: [],
-                @Prop summary: ""
-                @Prop title: page_title,
-                @Prop url: page_url
-        }
-        */
-
-        msg := Format("{1}:\n{2}\n{3}\n\n{4}", page.title, page.links, page.categories, page.text)
+        ; examples
+        ; Msgbox(page.text)
+        ; Msgbox(page.links)
+        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.categories, page.text, A_Index)
         MsgBox(msg)
     }
 }
