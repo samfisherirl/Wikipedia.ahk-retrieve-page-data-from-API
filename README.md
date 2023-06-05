@@ -28,18 +28,23 @@ EnumeratePagesReturned(wiki_pages) {
         ; Examples
         ; MsgBox(page.text)
         ; MsgBox(page.links)
+        /*
+        page := {
+                @Prop categories : "",
+                @Prop category_list: [],
+                @Prop links: "",
+                @Prop text: "",
+                @Prop link_list: [],
+                @Prop summary: ""
+                @Prop title: page_title,
+                @Prop url: page_url
+        }
+        */
+
         msg := Format("{1}:\n{2}\n{3}\n\n{4}", page.title, page.links, page.categories, page.text)
         MsgBox(msg)
     }
 }
 
-; Wikipedia class definition
-Class Wikipedia {
-    ; Constructor
-    __New(keywords, headers := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36") {
-        ; Implementation details...
-    }
-
-    ; Methods...
-}
+```
 
