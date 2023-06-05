@@ -163,14 +163,6 @@ Class Wikipedia
             }
         }
     }
-    /*
-    summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{page_title.replace(' ', '_')}"
-    response = requests.get(summary_url)
-    data = response.json()
-
-    if "extract" in data:
-        page_info["summary"] = data["extract"]
-    */
 }
 
 
