@@ -38,38 +38,36 @@ enumerate_pages_returned(wiki_pages){
 */
 
 Class Wikipedia
-{
-    /* Wikipedia
-    * __New(headers:=?)
+{ 
+    /** Wikipedia(?headers).query("my request here") => object
+     ** return => object.page.text
+     ** return => object.pages[index<6].text
+     * _______________________________________________
     * @param headers user agent
-    * * @method Get winhttp simple request handler
+    * * @method Get =>  winhttp simple request handler
     * * * @param URL
-    * * @method query returns first page match, stores top matches in object
-    */
+    * * @method query =>  returns first page match, stores top matches in object
+     * _______________________________________________
+    *  @Prop page.categories  "",
+    *  @Prop page.category_list   [],
+    *  @Prop page.links   "",
+    *  @Prop page.text   "",
+    *  @Prop page.link_list   [],
+    *  @Prop page.summary   ""
+    *  @Prop page.title   page_title,
+    *  @Prop page.url   page_url
+        */
     __New(
         headers := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
     )
     {
+        /**
+        */
         this.url := "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch={1}&srprop=size&srlimit=5"
         this.headers := headers
         this.first_match_storage := ""
         this.matches := Map()
         this.page := ""
-        /*
-        ;   @Prop categories : "",
-        ;   @Prop category_list: [],
-        ;   @Prop links: "",
-        ;   @Prop text: "",
-        ;   @Prop link_list: [],
-        ;   @Prop summary: ""
-        ;   @Prop title: page_title,
-        ;   @Prop url: page_url
-        page_title = result["title"]
-        page_url = f"https://en.wikipedia.org/wiki/{page_title.replace(' ', '_')}"
-        page_response = requests.get(page_url)
-        page_content = page_response.json()
-        page_extract = page_content["query"]["pages"][0]["extract"]
-        */
         this.pages := []
     }
     Get(url)
