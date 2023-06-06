@@ -15,8 +15,10 @@ This AutoHotkey library provides a convenient way to retrieve information from W
 #Include Wikipedia.ahk
 ; set content header
 wiki := Wikipedia() 
-page := wiki.query("python coding") ;python coding is NOT an exact match to the page title 
-    ; this return value stores only the primary match. 
+page := wiki.query("python coding")
+; python coding is NOT an exact match to the page title 
+; this return value stores only the primary match. 
+
     ; up to 5 results will be returned with object.pages
     ; matches are based on keywords and not title 1:1
     ;     page := {
