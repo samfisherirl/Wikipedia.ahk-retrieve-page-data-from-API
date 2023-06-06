@@ -2,20 +2,26 @@
 #Include Wikipedia.ahk
 ; set content header
 wiki := Wikipedia() 
-page := wiki.query("python coding") ;python coding is NOT an exact match to the page title 
-    ; this return value stores only the primary match. 
-    ; up to 5 results will be returned with object.pages
-    ; matches are based on keywords and not title 1:1
-    ;     page := {
-    ;             @Prop categories : "",
-    ;             @Prop category_list: [],
-    ;             @Prop links: "",
-    ;             @Prop text: "",
-    ;             @Prop link_list: [],
-    ;             @Prop summary: ""
-    ;             @Prop title: page_title,
-    ;             @Prop url: page_url
-    ;     }
+page := wiki.query("python coding") 
+; python coding is NOT an exact match to the page title 
+; this return value stores only the primary match. 
+; up to 5 results will be returned with object.pages
+; matches are based on keywords and not title 1:1
+
+/**
+* Wikipedia()
+** return => object.page.text
+** return => object.pages[index<6].text
+* 
+*  @Prop page.categories  "",
+*  @Prop page.category_list   [],
+*  @Prop page.links   "",
+*  @Prop page.text   "",
+*  @Prop page.link_list   [],
+*  @Prop page.summary   ""
+*  @Prop page.title   page_title,
+*  @Prop page.url   page_url
+ */
 
 MsgBox(page.text) ; the first result's text contents
 MsgBox(page.categories) ; this is a concaeted string but change to category_list and returns an array
