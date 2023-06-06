@@ -1,4 +1,4 @@
-﻿#Include JXON.ahk
+﻿#Include _JXON.ahk
 #Include Wikipedia.ahk
 ; set content header
 wiki := Wikipedia() 

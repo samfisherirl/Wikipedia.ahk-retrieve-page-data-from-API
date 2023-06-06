@@ -2,9 +2,9 @@
 #Include JXON.ahk
 #Include Wikipedia.ahk
 ; set content header
-wiki := Wikipedia() 
-page := wiki.query("python coding") ;python coding is NOT an exact match to the page title 
-    ; this return value stores only the primary match. 
+wiki := Wikipedia()
+page := wiki.query("python coding") ;python coding is NOT an exact match to the page title
+    ; this return value stores only the primary match.
     ; up to 5 results will be returned with object.pages
     ; matches are based on keywords and not title 1:1
     ;     page := {
@@ -52,7 +52,7 @@ Class Wikipedia
     {
         this.url := "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch={1}&srprop=size&srlimit=5"
         this.headers := headers
-        this.page_text := ""
+        this.first_match_storage := ""
         this.matches := Map()
         this.page := ""
         /*
@@ -69,7 +69,7 @@ Class Wikipedia
         page_response = requests.get(page_url)
         page_content = page_response.json()
         page_extract = page_content["query"]["pages"][0]["extract"]
-            */
+        */
         this.pages := []
     }
     Get(url)
@@ -96,7 +96,7 @@ Class Wikipedia
             jdata := Jxon_Load(&response)
             results := jdata["query"]["search"]
             if results {
-                this.page_text := false
+                this.first_match_storage := false
                 for result in results {
                     page_title := result["title"]
                     page_title := StrReplace(page_title, " ", "_")
@@ -104,7 +104,8 @@ Class Wikipedia
                     this.matches.Set(page_title, page_url)
                     response := this.Get(page_url)
                     jdata := Jxon_Load(&response)
-                    for pageID, val in jdata['query']['pages'] {
+                    for pageID, val in jdata['query']['pages']
+                    {
                         page_data := jdata['query']['pages'][pageID]
                         page := {
                             categories: "",
@@ -116,42 +117,46 @@ Class Wikipedia
                             title: page_title,
                             url: page_url
                         }
-                        if page_data["categories"] {
+                        if page_data["categories"]
+                        {
                             categories := page_data["categories"]
                             for category in categories {
                                 page.category_list.Push(category["title"])
                                 page.categories .= category["title"] "`n"
                             }
                         }
-                        if page_data["extlinks"] {
+                        if page_data["extlinks"]
+                        {
                             extlinks := page_data["extlinks"]
                             for extlink in extlinks {
                                 page.link_list.Push(extlink["*"])
                                 page.links .= extlink["*"] "`n"
                             }
                         }
-                        if not (this.page_text) {
-                            this.page_text := jdata['query']['pages'][pageID]['extract']
-                            this.page := page
-                        }
                         page.summary := this.retieve_summary(page_title)
-                        if not page.summary {
+                        if not page.summary
+                        {
                             if InStr(page.text, "`n`n") {
                                 page.summary := StrSplit(page.text, "`n`n")[1]
                             }
                         }
-                        page.text := this.page_text
+                        if not (this.first_match_storage)
+                        {
+                            this.first_match_storage := jdata['query']['pages'][pageID]['extract']
+                            this.page := page
+                        }
+                        page.text := jdata['query']['pages'][pageID]['extract']
                         this.pages.Push(page)
                     }
                 }
-            return this.page
+                return this.page
             }
         }
     }
-    retieve_summary(page_title){
+    retieve_summary(page_title) {
         response := this.Get(
             Format(
-                "https://en.wikipedia.org/api/rest_v1/page/summary/{1}", 
+                "https://en.wikipedia.org/api/rest_v1/page/summary/{1}",
                 page_title
             ))
         if response {
