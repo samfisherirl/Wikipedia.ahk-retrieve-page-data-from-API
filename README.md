@@ -44,7 +44,9 @@ enumerate_pages_returned(wiki_pages){
         ; examples
         ; Msgbox(page.text)
         ; Msgbox(page.links)
-        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.categories, page.text, A_Index)
+        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", 
+                        page.title, page.links, page.categories, 
+                        page.text, A_Index)
         MsgBox(msg)
     }
 }
