@@ -1,4 +1,5 @@
-
+;source https://github.com/samfisherirl/Wikipedia.ahk-retrieve-page-data-from-API
+;requires https://github.com/TheArkive/JXON_ahk2
 /** Wikipedia(?headers).query("my request here") => object
  ** return => object.page.text
     ** return => object.pages[index<6].text
@@ -21,7 +22,7 @@ Class Wikipedia
 { 
     __New(
      /** Wikipedia(?headers).query("my request here") => object
-     ** return => object.page.text
+     ** return => this.object.page.text
      ** return => object.pages[index<6].text
      * _______________________________________________
      * @param headers user agent
@@ -124,6 +125,7 @@ Class Wikipedia
                     this.first_match_storage := page_data['extract']
                     this.page := page
                 }
+                this.segment_categories(page.text)
                 this.pages.Push(page)
             }
     }
@@ -137,6 +139,22 @@ Class Wikipedia
             data := Jxon_Load(&response)
             if data["extract"] {
                 return data["extract"]
+            }
+        }
+    }
+    segment_categories(page_text){
+        between_linebreaks := StrSplit(page_text, "`n`n")
+        for line in between_linebreaks {
+            if A_Index == 1 {
+                summary := line
+            }
+            else if InStr(line, "==") {
+                subsection := {
+                    category: "",
+                    text: ""
+                }
+                subsection.category := StrSplit(line, "==")[1]
+                subsection.text := StrSplit(line, "==")[1]
             }
         }
     }
