@@ -15,15 +15,15 @@ page := wiki.query("python coding")
 MsgBox(page.text) ; the first result's text contents
 
 msg := ""
-for section in wiki.pages[2].sections { 
+for sections in wiki.pages[2].sections { 
     /**
      * wiki.pages[] includes all 5 potential matchs, with best to worst order
      * page.sections or wiki.pages[2].sections returns=>
      * sections.category => "=== History ==="
      * sections.text => "Python was founded by...."
      */
-    if section.category && section.text {
-        msg .= section.category ":`n" section.text "`n`n`n"
+    if sections.category && sections.text {
+        msg .= sections.category ":`n" sections.text "`n`n`n"
     }
 }
 MsgBox(msg) ;prints all sections and text enumerated
