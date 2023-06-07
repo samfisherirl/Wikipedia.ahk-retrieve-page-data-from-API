@@ -1,25 +1,35 @@
-;source https://github.com/samfisherirl/Wikipedia.ahk-retrieve-page-data-from-API
+;source and examples: https://github.com/samfisherirl/Wikipedia.ahk-retrieve-page-data-from-API
 ;requires https://github.com/TheArkive/JXON_ahk2
+
 /** Wikipedia(?headers).query("my request here") => object
- ** return => object.page.text
-    ** return => object.pages[index<6].text
-    * _______________________________________________
-* @param headers user agent
-* * @method Get =>  winhttp simple request handler
-* * * @param URL
-* * @method query =>  returns first page match, stores top matches in object
-    * _______________________________________________
-*  @Prop page.categories  "",
-*  @Prop page.category_list   [],
-*  @Prop page.links   "",
-*  @Prop page.text   "",
-*  @Prop page.link_list   [],
-*  @Prop page.summary   ""
-*  @Prop page.title   page_title,
-*  @Prop page.url   page_url
-    */
+ **  @return    > object.page.text
+ **  @return    > object.pages[index<6].text
+ * _______________________________________________
+ *  @param headers user agent
+ * *  @method Get >  winhttp simple request handler
+ * * *  @param URL
+ * *  @method query >  returns first page match, stores top matches in object
+ * _______________________________________________
+ *  @object  page
+ *  @Prop  page.categories  "",
+ *  @Prop  page.categories_list   [],
+ *  @Prop  page.links   "",
+ *  @Prop  page.text   "",
+ *  @Prop  page.links_list   [],
+ *  @Prop  page.summary   ""
+ *  @Prop  page.title   page_title,
+ *  @Prop  page.url   page_url
+ * _______________________________________________
+ * List of sections in each page = >
+ * _______________________________________________
+ *  @Object  object.page.sections   or   object.pages[2].sections
+ *  @Prop  page.sections[A_Index].category
+ *  @Returns  "=== History ==="
+ *  @Prop  page.sections[A_Index].text    >   "Python was founded by...."
+ *  @Returns  "Python was founded by...."
+ */
 Class Wikipedia
-{ 
+{
     __New(
      /** Wikipedia(?headers).query("my request here") => object
      ** return => this.object.page.text
@@ -30,7 +40,7 @@ Class Wikipedia
      * * * @param URL
      * * @method query =>  returns first page match, stores top matches in object
      * _______________________________________________
-        */
+     */
         headers := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
     )
     {
@@ -82,17 +92,18 @@ Class Wikipedia
             }
         }
     }
-    segment_page(jdata, page_title, page_url){
+    segment_page(jdata, page_title, page_url)
+    {
         for pageID, val in jdata['query']['pages']
             {
                 page_data := jdata['query']['pages'][pageID]
                 page := {
-                    categories: "",
-                    category_list: [],
+                    categories_list: [],
                     links: "",
                     text: "",
-                    link_list: [],
+                    links_list: [],
                     summary: "",
+                    ;sections := [],
                     title: page_title,
                     url: page_url
                 }
@@ -101,15 +112,14 @@ Class Wikipedia
                 {
                     categories := page_data["categories"]
                     for category in categories {
-                        page.category_list.Push(category["title"])
-                        page.categories .= category["title"] "`n"
+                        page.categories_list.Push(category["title"])
                     }
                 }
                 if page_data["extlinks"]
                 {
                     extlinks := page_data["extlinks"]
                     for extlink in extlinks {
-                        page.link_list.Push(extlink["*"])
+                        page.links_list.Push(extlink["*"])
                         page.links .= extlink["*"] "`n"
                     }
                 }
@@ -125,11 +135,12 @@ Class Wikipedia
                     this.first_match_storage := page_data['extract']
                     this.page := page
                 }
-                this.segment_categories(page.text)
+                page.sections := this.segment_sections(page.text)
                 this.pages.Push(page)
             }
     }
-    retieve_summary(page_title) {
+    retieve_summary(page_title) 
+    {
         response := this.Get(
             Format(
                 "https://en.wikipedia.org/api/rest_v1/page/summary/{1}",
@@ -142,21 +153,34 @@ Class Wikipedia
             }
         }
     }
-    segment_categories(page_text){
-        between_linebreaks := StrSplit(page_text, "`n`n")
+    segment_sections(page_text)
+    {
+        between_linebreaks := StrSplit(page_text, "`n`n`n")
+        first_line := 0
+        categories := []
         for line in between_linebreaks {
-            if A_Index == 1 {
-                summary := line
+            section := {
+                category: "",
+                text: ""
             }
-            else if InStr(line, "==") {
-                subsection := {
-                    category: "",
-                    text: ""
+            if InStr(line, "==") {
+                split_line := StrSplit(line, "=")
+                i := split_line.Length
+                section.text := StrReplace(split_line[split_line.Length], "`n", " ")
+                section.text := Trim(section.text)
+                loop i {
+                    if A_Index < i {
+                        section.category .= split_line[A_Index]
+                    }
                 }
-                subsection.category := StrSplit(line, "==")[1]
-                subsection.text := StrSplit(line, "==")[1]
+                if StrLen(section.category) > 100 {
+                    continue
+                }
+                section.category := Trim(section.category)
+                categories.Push(section)
             }
         }
+        return categories
     }
 }
 

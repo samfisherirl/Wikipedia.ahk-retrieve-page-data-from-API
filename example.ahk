@@ -8,25 +8,31 @@ page := wiki.query("python coding")
 ; up to 5 results will be returned with object.pages
 ; matches are based on keywords and not title 1:1
 
-/**
-* Wikipedia()
-** return => object.page.text
-** return => object.pages[index<6].text
-* 
-*  @Prop page.categories  "",
-*  @Prop page.category_list   [],
-*  @Prop page.links   "",
-*  @Prop page.text   "",
-*  @Prop page.link_list   [],
-*  @Prop page.summary   ""
-*  @Prop page.title   page_title,
-*  @Prop page.url   page_url
- */
+;source https://github.com/samfisherirl/Wikipedia.ahk-retrieve-page-data-from-API
+;requires https://github.com/TheArkive/JXON_ahk2
+
 
 MsgBox(page.text) ; the first result's text contents
-MsgBox(page.categories) ; this is a concaeted string but change to category_list and returns an array
+
+msg := ""
+for section in wiki.pages[2].sections { 
+    /**
+     * wiki.pages[] includes all 5 potential matchs, with best to worst order
+     * page.sections or wiki.pages[2].sections returns=>
+     * sections.category => "=== History ==="
+     * sections.text => "Python was founded by...."
+     */
+    if section.category && section.text {
+        msg .= section.category ":`n" section.text "`n`n`n"
+    }
+}
+MsgBox(msg) ;prints all sections and text enumerated
+
 MsgBox(page.links) ; this is a concaeted string but change to link_list and returns an array
 enumerate_pages_returned(wiki.pages)
+enumerate_sections(wiki.pages[3])
+
+
 
 
 enumerate_pages_returned(wiki_pages){
@@ -39,3 +45,45 @@ enumerate_pages_returned(wiki_pages){
         MsgBox(msg)
     }
 }
+
+
+enumerate_sections(wiki_pages){
+    ;wiki.pages.ownprops()
+    for page in wiki_pages {
+        ; examples
+        ; Msgbox(page.text)
+        ; Msgbox(page.links)
+        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.categories, page.text, A_Index)
+        MsgBox(msg)
+    }
+}
+
+
+
+/** Wikipedia(?headers).query("my request here") => object
+ **  @return    > object.page.text
+ **  @return    > object.pages[index<6].text
+ * _______________________________________________
+ *  @param headers user agent
+ * *  @method Get >  winhttp simple request handler
+ * * *  @param URL
+ * *  @method query >  returns first page match, stores top matches in object
+ * _______________________________________________
+ *  @object  page
+ *  @Prop  page.categories  "",
+ *  @Prop  page.categories_list   [],
+ *  @Prop  page.links   "",
+ *  @Prop  page.text   "",
+ *  @Prop  page.links_list   [],
+ *  @Prop  page.summary   ""
+ *  @Prop  page.title   page_title,
+ *  @Prop  page.url   page_url
+ * _______________________________________________
+ * List of sections in each page = >
+ * _______________________________________________
+ *  @Object  object.page.sections   or   object.pages[2].sections
+ *  @Prop  page.sections[A_Index].category
+ *  @Returns  "=== History ==="
+ *  @Prop  page.sections[A_Index].text    >   "Python was founded by...."
+ *  @Returns  "Python was founded by...."
+ */
