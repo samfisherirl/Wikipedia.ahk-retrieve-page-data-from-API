@@ -13,11 +13,40 @@ This AutoHotkey library provides a convenient way to retrieve information from W
 ```autohotkey
 #Include _JXON.ahk
 #Include Wikipedia.ahk
-; set content header
 wiki := Wikipedia() 
 page := wiki.query("python coding") 
 ; python coding is NOT an exact match to the page title 
 ; this return value stores only the primary match. 
+
+/** Wikipedia(?headers).query("my request here") => object
+ **  @return    > object.page.text
+ **  @return    > object.pages[index<6].text
+ * _______________________________________________
+ *  @param headers user agent
+ * *  @method Get >  winhttp simple request handler
+ * * *  @param URL
+ * *  @method query >  returns first page match, stores top matches in object
+ * _______________________________________________
+ *  @object  page
+ *  @Prop  page.categories  "",
+ *  @Prop  page.categories_list   [],
+ *  @Prop  page.links   "",
+ *  @Prop  page.text   "",
+ *  @Prop  page.links_list   [],
+ *  @Prop  page.summary   ""
+ *  @Prop  page.title   page_title,
+ *  @Prop  page.url   page_url
+ * _______________________________________________
+ * List of sections in each page = >
+ * _______________________________________________
+ *  @Object  object.page.sections   or   object.pages[2].sections
+ *  @Prop  page.sections[A_Index].category
+ *  @Returns  "=== History ==="
+ *  @Prop  page.sections[A_Index].text    >   "Python was founded by...."
+ *  @Returns  "Python was founded by...."
+ */
+
+
 ; up to 5 results will be returned with object.pages
 ; matches are based on keywords and not title 1:1
 
@@ -73,33 +102,6 @@ enumerate_sections(wiki_pages){
 
 
 
-/** Wikipedia(?headers).query("my request here") => object
- **  @return    > object.page.text
- **  @return    > object.pages[index<6].text
- * _______________________________________________
- *  @param headers user agent
- * *  @method Get >  winhttp simple request handler
- * * *  @param URL
- * *  @method query >  returns first page match, stores top matches in object
- * _______________________________________________
- *  @object  page
- *  @Prop  page.categories  "",
- *  @Prop  page.categories_list   [],
- *  @Prop  page.links   "",
- *  @Prop  page.text   "",
- *  @Prop  page.links_list   [],
- *  @Prop  page.summary   ""
- *  @Prop  page.title   page_title,
- *  @Prop  page.url   page_url
- * _______________________________________________
- * List of sections in each page = >
- * _______________________________________________
- *  @Object  object.page.sections   or   object.pages[2].sections
- *  @Prop  page.sections[A_Index].category
- *  @Returns  "=== History ==="
- *  @Prop  page.sections[A_Index].text    >   "Python was founded by...."
- *  @Returns  "Python was founded by...."
- */
 
 ```
 
