@@ -15,10 +15,11 @@ page := wiki.query("python coding")
 MsgBox(page.text) ; the first result's text contents
 
 msg := ""
-for sections in wiki.pages[2].sections { 
+for sections in wiki.pages[2].sections {
     /**
      * wiki.pages[] includes all 5 potential matchs, with best to worst order
      * page.sections or wiki.pages[2].sections returns=>
+     * 
      * sections.category => "=== History ==="
      * sections.text => "Python was founded by...."
      */
@@ -30,7 +31,6 @@ MsgBox(msg) ;prints all sections and text enumerated
 
 MsgBox(page.links) ; this is a concaeted string but change to link_list and returns an array
 enumerate_pages_returned(wiki.pages)
-enumerate_sections(wiki.pages[3])
 
 
 
@@ -41,23 +41,10 @@ enumerate_pages_returned(wiki_pages){
         ; examples
         ; Msgbox(page.text)
         ; Msgbox(page.links)
-        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.categories, page.text, A_Index)
+        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.text, A_Index)
         MsgBox(msg)
     }
 }
-
-
-enumerate_sections(wiki_pages){
-    ;wiki.pages.ownprops()
-    for page in wiki_pages {
-        ; examples
-        ; Msgbox(page.text)
-        ; Msgbox(page.links)
-        msg := Format("Match number{5} is {1}: `n{2}`n{3}`n`n{4}", page.title, page.links, page.categories, page.text, A_Index)
-        MsgBox(msg)
-    }
-}
-
 
 
 /** Wikipedia(?headers).query("my request here") => object

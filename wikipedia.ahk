@@ -19,6 +19,8 @@
  *  @Prop  page.summary   ""
  *  @Prop  page.title   page_title,
  *  @Prop  page.url   page_url
+ *  @Prop  page.sections[1].category, 
+ *  @Prop  page.sections[1].text
  * _______________________________________________
  * List of sections in each page = >
  * _______________________________________________
@@ -136,7 +138,10 @@ Class Wikipedia
                     this.page := page
                 }
                 page.sections := this.segment_sections(page.text)
-                this.pages.Push(page)
+                if (page.links != "") && (page.text != "") && (page.sections != [])
+                {
+                    this.pages.Push(page)
+                }
             }
     }
     retieve_summary(page_title) 
@@ -177,7 +182,9 @@ Class Wikipedia
                     continue
                 }
                 section.category := Trim(section.category)
-                categories.Push(section)
+                if section.category != "" && section.text != "" {
+                    categories.Push(section)
+                }
             }
         }
         return categories
