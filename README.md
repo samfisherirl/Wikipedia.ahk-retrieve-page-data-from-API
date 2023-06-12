@@ -69,7 +69,7 @@ enumerate_pages_returned(wiki_pages){
  * * *  @param URL
  * *  @method query >  returns first page match, stores top matches in object
  * _______________________________________________
- *  @object  page
+ *  @object  page __or__ pages[A_Index]
  *  @Prop  page.categories  "",
  *  @Prop  page.categories_list   [],
  *  @Prop  page.links   "",
