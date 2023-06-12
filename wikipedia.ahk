@@ -11,6 +11,7 @@
  * *  @method query >  returns first page match, stores top matches in object
  * _______________________________________________
  *  @object  page
+ *  @object  pages[A_Index]
  *  @Prop  page.categories  "",
  *  @Prop  page.categories_list   [],
  *  @Prop  page.links   "",
